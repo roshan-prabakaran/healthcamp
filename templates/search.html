@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="search-section">
+        <h2>Search Health Camps</h2>
+        <form method="GET" class="search-form">
+            <div class="search-inputs">
+                <input type="text" name="query" placeholder="Search by camp name or service..." value="{{ query }}">
+                <input type="text" name="location" placeholder="Enter location..." value="{{ location }}">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="search-results">
+        {% if camps %}
+            <h3>Found {{ camps|length }} camps</h3>
+            <div class="camps-grid">
+                {% for camp in camps %}
+                    <div class="camp-card">
+                        <div class="camp-header">
+                            <h3>{{ camp.name }}</h3>
+                            <span class="camp-hospital">{{ camp.hospital }}</span>
+                        </div>
+                        <div class="camp-details">
+                            <p><i class="fas fa-calendar"></i> {{ camp.date }}</p>
+                            <p><i class="fas fa-clock"></i> {{ camp.time }}</p>
+                            <p><i class="fas fa-map-marker-alt"></i> {{ camp.location }}</p>
+                            <p><i class="fas fa-users"></i> {{ camp.registered }}/{{ camp.capacity }} registered</p>
+                        </div>
+                        <div class="camp-services">
+                            {% for service in camp.services[:3] %}
+                                <span class="service-tag">{{ service }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="camp-actions">
+                            <a href="{{ url_for('camp_details', camp_id=camp.id) }}" class="btn btn-outline">View Details</a>
+                            {% if session.user %}
+                                <a href="{{ url_for('register_camp', camp_id=camp.id) }}" class="btn btn-primary">Register</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-results">
+                <i class="fas fa-search"></i>
+                <h3>No camps found</h3>
+                <p>Try different search terms or check back later for new camps.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

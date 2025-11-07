@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="form-container">
+        <h2>Register for {{ camp.name }}</h2>
+        <div class="camp-summary">
+            <p><strong>Hospital:</strong> {{ camp.hospital }}</p>
+            <p><strong>Date:</strong> {{ camp.date }}</p>
+            <p><strong>Time:</strong> {{ camp.time }}</p>
+            <p><strong>Location:</strong> {{ camp.location }}</p>
+        </div>
+        <form method="POST" class="registration-form">
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" required>
+                    I confirm that I want to register for this health camp
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" required>
+                    I agree to receive notifications about this camp via SMS and email
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Confirm Registration</button>
+        </form>
+        <p class="note">You will receive a confirmation SMS and email after registration.</p>
+    </div>
+</div>
+{% endblock %}

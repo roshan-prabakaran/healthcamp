@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>My Registrations</h2>
+    
+    {% if registrations %}
+        <div class="registrations-list">
+            {% for reg in registrations %}
+                <div class="registration-card">
+                    <div class="reg-header">
+                        <h3>{{ reg.camp.name }}</h3>
+                        <span class="reg-status status-{{ reg.registration.status }}">{{ reg.registration.status }}</span>
+                    </div>
+                    <div class="reg-details">
+                        <p><strong>Hospital:</strong> {{ reg.camp.hospital }}</p>
+                        <p><strong>Date:</strong> {{ reg.camp.date }}</p>
+                        <p><strong>Time:</strong> {{ reg.camp.time }}</p>
+                        <p><strong>Location:</strong> {{ reg.camp.location }}</p>
+                        <p><strong>Registered on:</strong> {{ reg.registration.registration_date }}</p>
+                    </div>
+                    <div class="reg-actions">
+                        <a href="{{ url_for('camp_details', camp_id=reg.camp.id) }}" class="btn btn-outline">View Camp</a>
+                        <button onclick="generateQRCode({{ reg.camp.id }})" class="btn btn-primary">Generate QR Code</button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-registrations">
+            <i class="fas fa-clipboard-list"></i>
+            <h3>No registrations yet</h3>
+            <p>You haven't registered for any health camps yet.</p>
+            <a href="{{ url_for('search') }}" class="btn btn-primary">Find Camps</a>
+        </div>
+    {% endif %}
+</div>
+
+<div id="qrModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeQRModal()">&times;</span>
+        <h3>QR Code for Check-in</h3>
+        <div id="qrCode"></div>
+        <p>Show this QR code at the camp for quick check-in</p>
+    </div>
+</div>
+{% endblock %}

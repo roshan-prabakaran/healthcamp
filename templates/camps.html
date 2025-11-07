@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="fw-bold">Find Health Camps</h1>
+            <p class="text-muted">Discover free health camps in your area</p>
+        </div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="GET" action="{{ url_for('camps') }}">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="search" 
+                                       placeholder="Search by camp name, hospital, or service..." 
+                                       value="{{ search }}">
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Results -->
+    <div class="row">
+        <div class="col-12">
+            <h5 class="mb-3">{{ camps|length }} camps found</h5>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+        {% for camp in camps %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ camp.name }}</h5>
+                        <p class="text-muted mb-2">{{ camp.hospital }}</p>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> {{ camp.date }}<br>
+                                <i class="fas fa-clock"></i> {{ camp.time }}<br>
+                                <i class="fas fa-map-marker-alt"></i> {{ camp.location }}
+                            </small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            {% for service in camp.services %}
+                                <span class="service-badge">{{ service }}</span>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="progress mb-3" style="height: 8px;">
+                            <div class="progress-bar" role="progressbar" 
+                                 style="width: {{ (camp.registered / camp.capacity * 100)|round }}%">
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-users"></i> {{ camp.registered }}/{{ camp.capacity }} registered
+                            </small>
+                            <div>
+                                <a href="{{ url_for('camp_detail', camp_id=camp.id) }}" class="btn btn-outline-primary btn-sm">
+                                    Details
+                                </a>
+                                {% if session.user %}
+                                    <a href="{{ url_for('book_camp', camp_id=camp.id) }}" class="btn btn-success btn-sm">
+                                        Register
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    
+    {% if not camps %}
+        <div class="text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h4>No camps found</h4>
+            <p class="text-muted">Try adjusting your search criteria</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

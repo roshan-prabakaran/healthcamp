@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Find Free Health Camps Near You</h1>
+        <p>Access quality healthcare services through our network of free health camps</p>
+        <div class="hero-actions">
+            <a href="{{ url_for('search') }}" class="btn btn-primary">Find Camps</a>
+            {% if not session.user %}
+                <a href="{{ url_for('register') }}" class="btn btn-secondary">Register Now</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <section class="featured-camps">
+        <h2>Upcoming Health Camps</h2>
+        <div class="camps-grid">
+            {% for camp in camps %}
+                <div class="camp-card">
+                    <div class="camp-header">
+                        <h3>{{ camp.name }}</h3>
+                        <span class="camp-hospital">{{ camp.hospital }}</span>
+                    </div>
+                    <div class="camp-details">
+                        <p><i class="fas fa-calendar"></i> {{ camp.date }}</p>
+                        <p><i class="fas fa-clock"></i> {{ camp.time }}</p>
+                        <p><i class="fas fa-map-marker-alt"></i> {{ camp.location }}</p>
+                        <p><i class="fas fa-users"></i> {{ camp.registered }}/{{ camp.capacity }} registered</p>
+                    </div>
+                    <div class="camp-services">
+                        {% for service in camp.services[:3] %}
+                            <span class="service-tag">{{ service }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="camp-actions">
+                        <a href="{{ url_for('camp_details', camp_id=camp.id) }}" class="btn btn-outline">View Details</a>
+                        {% if session.user %}
+                            <a href="{{ url_for('register_camp', camp_id=camp.id) }}" class="btn btn-primary">Register</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="features">
+        <h2>Why Choose Our Platform?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-search-location"></i>
+                <h3>Location-Based Search</h3>
+                <p>Find health camps near your location with our advanced search feature</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Easy Registration</h3>
+                <p>Register for camps online or via SMS for areas with limited internet</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-bell"></i>
+                <h3>Real-time Updates</h3>
+                <p>Get notified about new camps and updates via SMS and email</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-qrcode"></i>
+                <h3>QR Code Check-in</h3>
+                <p>Quick and contactless check-in at health camps using QR codes</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}

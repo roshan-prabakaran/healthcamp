@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="camp-detail">
+        <div class="camp-detail-header">
+            <h1>{{ camp.name }}</h1>
+            <span class="camp-hospital">{{ camp.hospital }}</span>
+        </div>
+
+        <div class="camp-detail-content">
+            <div class="camp-info">
+                <div class="info-section">
+                    <h3>Event Details</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ camp.date }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ camp.time }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ camp.location }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-home"></i>
+                            <span>{{ camp.address }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <span>{{ camp.contact }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>{{ camp.registered }}/{{ camp.capacity }} registered</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>Services Offered</h3>
+                    <div class="services-list">
+                        {% for service in camp.services %}
+                            <span class="service-tag">{{ service }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>Description</h3>
+                    <p>{{ camp.description }}</p>
+                </div>
+
+                <div class="registration-section">
+                    {% if session.user %}
+                        <a href="{{ url_for('register_camp', camp_id=camp.id) }}" class="btn btn-primary btn-large">
+                            <i class="fas fa-user-plus"></i> Register for this Camp
+                        </a>
+                    {% else %}
+                        <p class="login-prompt">Please <a href="{{ url_for('login') }}">login</a> to register for this camp.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
